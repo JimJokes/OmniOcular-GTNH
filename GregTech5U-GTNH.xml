@@ -1,8 +1,20 @@
 <!--Version: 5.09.34-GTNH-->
-<!--Date: 2021/01/30-->
+<!--Date: 2021/01/31-->
 <!--Author: Amamiya-Nagisa-->
 <!--Editor: JimJokes-->
 <oo>
+<init>
+	function formatBytes(bytes) {
+		if (bytes === 0) return 0;
+		var k = 1000,
+		sizes = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'],
+		i = Math.floor(Math.log(bytes) / Math.log(k));
+		return (bytes / Math.pow(k, i)).toFixed(i==0?0:2)+sizes[i];
+	}
+	function IsMatch(min, max, val){
+		return min <= val && val <= max
+	}
+</init>
 <tileentity id="BaseMetaTileEntity">
 		<!--锅炉：温度-->
 		<line displayname="hud.msg.temperature">
@@ -243,11 +255,12 @@
 				}
 			}
 		</line>
-		
+				
 		<!--机器/电池箱缓存能量-->
 		<line displayname="hud.msg.energ">
 		    if(nbt['mStoredEnergy']!=0){
-		    return (nbt['mStoredEnergy']/1000).toFixed(2)+"K"+GRAY+" EU"}
+				return formatBytes(nbt['mStoredEnergy'])+GRAY+" EU"
+			}
 		</line>
 
 		
@@ -277,7 +290,7 @@
 			    }
 			};
 			if(a+c!=0){
-            return ((a+c)/1000).toFixed(2)+"K"+GRAY+" EU"}
+            return formatBytes(a+c)+GRAY+" EU"}
 		</line>
 			
 		<!--
@@ -396,9 +409,6 @@
 	<!--线缆/管道 -->
 	<tileentity id="BaseMetaPipeEntity">
         <line displayname="额定电压">
-			function IsMatch(min, max, val){
-				return min <= val && val <= max
-			}
 			if(IsMatch(1200, 1299, nbt['mID'])){return GREEN+"32"+GRAY+" EU/t"}
 			if(IsMatch(1300, 1399, nbt['mID'])||IsMatch(2200, 2219, nbt['mID'])||IsMatch(2320, 2329, nbt['mID'])){return GREEN+"128"+GRAY+" EU/t"}
 			if(IsMatch(1400, 1499, nbt['mID'])||IsMatch(2220, 2239, nbt['mID'])||IsMatch(2340, 2349, nbt['mID'])){return GREEN+"512"+GRAY+" EU/t"}
