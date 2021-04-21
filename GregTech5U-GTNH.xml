@@ -9,51 +9,32 @@
 		var k = 1000,
 		sizes = ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'],
 		i = Math.floor(Math.log(bytes) / Math.log(k));
-		return (bytes / Math.pow(k, i)).toFixed(i==0?0:2)+sizes[i];
+		if(sizes[i]){return (bytes / Math.pow(k, i)).toFixed(i==0?0:2)+sizes[i]}
+		return bytes
 	}
-	function IsMatch(min, max, val){
+	function isBetween(min, max, val){
 		return min <= val && val <= max
 	}
 </init>
 <tileentity id="BaseMetaTileEntity">
 		<!--锅炉：温度-->
 		<line displayname="hud.msg.temperature">
-            if(nbt['mID']==100)
-			return nbt['mTemperature']+" / 500"+WHITE+" C"
-		</line>
-		<line displayname="hud.msg.temperature">
-            if(nbt['mID']==105)
-			return nbt['mTemperature']+" / 500"+WHITE+" C"
-		</line>
-		<line displayname="hud.msg.temperature">
-            if(nbt['mID']==101)
-			return nbt['mTemperature']+" / 1000"+WHITE+" C"
-		</line>
-		<line displayname="hud.msg.temperature">
-            if(nbt['mID']==102)
-			return nbt['mTemperature']+" / 1000"+WHITE+" C"
-		</line>
-		<line displayname="hud.msg.temperature">
-            if(nbt['mID']==114)
-			return nbt['mTemperature']+" / 500"+WHITE+" C"
-		</line>
-		<line displayname="hud.msg.temperature">
-            if(nbt['mID']==753)
-			return nbt['mTemperature']+" / 1250"+WHITE+" C"
-		</line>
-		<line displayname="hud.msg.temperature">
-            if(nbt['mID']==754)
-			return nbt['mTemperature']+" / 1500"+WHITE+" C"
-		</line>
-		<line displayname="hud.msg.temperature">
-            if(nbt['mID']==755)
-			return nbt['mTemperature']+" / 1750"+WHITE+" C"
+            if([100,105,114].indexOf(nbt['mID'])>-1){
+			return nbt['mTemperature']+" / 500"+WHITE+" C"}
+		    if([101,102].indexOf(nbt['mID'])>-1){
+			return nbt['mTemperature']+" / 1000"+WHITE+" C"}
+			if(nbt['mID']==753){
+			return nbt['mTemperature']+" / 1250"+WHITE+" C"}
+			if(nbt['mID']==754){
+			return nbt['mTemperature']+" / 1500"+WHITE+" C"}
+			if(nbt['mID']==755){
+			return nbt['mTemperature']+" / 1750"+WHITE+" C"}
 		</line>
 		
 		<!--电力机器：功率-->
 		<line displayname="hud.msg.greg.power">
 		    if(nbt['mID']!=1154)
-			if(nbt['mEUt']!=undefined && nbt['mEUt']!=0 && nbt['mID']!=1020 && nbt['mID']!=1021 && nbt['mID']!=1022 && nbt['mID']!=1023)
+			if(nbt['mEUt']!=undefined && nbt['mEUt']!=0 && nbt['mID']!=1020 && nbt['mID']!=1021 && nbt['mID']!=1022 && nbt['mID']!=1023 && nbt['mID']!=31041)
 			if(nbt['mStoredSteam']==0)
 			if(nbt['mSolderingTool']!=0){
 			return YELLOW+Math.abs(nbt['mEUt'])+WHITE+" EU/t"}
@@ -69,9 +50,9 @@
 		
 		<!--蒸汽机器：功率-->
 		<line displayname="hud.msg.greg.requiredsteam">
-		    if(nbt['mEUt']!=0)
+		    if(nbt['mEUt']!=0 && nbt['mActive']==1)
 		    if(nbt['mEUt']!=undefined)
-			if(nbt['mStoredSteam']!=0){
+			if(nbt['mStoredSteam']!=0 || nbt['mID']==31041){
 			return YELLOW+Math.abs(nbt['mEUt']) * 2+WHITE+" mB/t"}
 		</line>
 		
@@ -174,7 +155,7 @@
 			switch(nbt['mActive']){
 			case 0:return RED+"停止运行";
 			break;
-			case 1:return GREEN"运行正常";
+			case 1:return GREEN+"运行正常";
 			break;}}
 		</line>
 		
@@ -197,7 +178,7 @@
 		<!--多方块机器需要维修 -->
 		<line displayname="注意 !">
 			if(nbt['mSolderingTool']==0){
-			return WHITE+"需要维护"}
+			return RED+"xx 需要维护 xx"}
 		</line>	
 		
 		<!--RF能量转换器 -->
@@ -268,30 +249,25 @@
 		<line displayname="电池">
 		    a=0;
 			b=0;
-			for(i=0;i<=15;i++){
-				if(nbt['Inventory'][i]!=undefined){
-				    b=b+1;
-				    if(nbt['Inventory'][i]['tag']!=undefined){
-				        if(nbt['Inventory'][i]['tag']['GT.ItemCharge']!=undefined){
-		    	            a=a+nbt['Inventory'][i]['tag']['GT.ItemCharge'];
-		    		    }
-				    }
-			    }
+			for(i=0,len=nbt['Inventory'].length;i<len;i++){
+				b=b+1;
+				if(nbt['Inventory'][i]['tag']!=undefined){
+					if(nbt['Inventory'][i]['tag']['GT.ItemCharge']!=undefined){
+						a=a+nbt['Inventory'][i]['tag']['GT.ItemCharge'];
+					}else if(nbt['Inventory'][i]['tag']['charge']!=undefined){
+						a=a+nbt['Inventory'][i]['tag']['charge']
+					}
+				}
 			};
-			c=0;
-			d=0;
-			for(o=0;o<=15;o++){if(nbt['Inventory'][o]!=undefined){
-				    d=d+1;
-				    if(nbt['Inventory'][o]['tag']!=undefined){
-				        if(nbt['Inventory'][o]['tag']['charge']!=undefined){
-		    	            c=c+nbt['Inventory'][o]['tag']['charge'];
-		    		    }
-				    }
-			    }
-			};
-			if(a+c!=0){
-            return formatBytes(a+c)+GRAY+" EU"}
+			if(a!=0){
+            return formatBytes(a)+GRAY+" EU"}
 		</line>
+		
+		<!--电池箱 -->
+		<line displayname="最大电流">
+			if(isBetween(160,199,nbt['mID'])||isBetween(690,699)||isBetween(11240,11275)){return GREEN+b+GRAY+" A"}
+		</line>
+
 			
 		<!--
 		<line displayname="hud.msg.energ">
@@ -384,20 +360,7 @@
 		<line displayname="流体输出">
 		    if(nbt['mOutputFluids11']['Amount']!=undefined){return WHITE+nbt['mOutputFluids11']['Amount']+YELLOW+"mB "+GREEN+fluidName(nbt['mOutputFluids11']['FluidName'])}
 		</line>
-		
-		<!--电池箱 -->
-		<line displayname="最大电流">
-		    for (i=0;i<=39;i++){
-				if(nbt['mID']==160+i){return GREEN+b+GRAY+" A"}
-			}
-		    for (i=0;i<=9;i++){
-				if(nbt['mID']==690+i){return GREEN+b+GRAY+" A"}
-			}
-			for (i=0;i<=35;i++){
-				if(nbt['mID']==11240+i){return GREEN+b+GRAY+" A"}
-			}
-		</line>
-		
+				
 		<!--机器状态 -->
 		<line>
 		    if(nbt['mAllowInputFromOutputSide']==1){
@@ -409,22 +372,22 @@
 	<!--线缆/管道 -->
 	<tileentity id="BaseMetaPipeEntity">
         <line displayname="额定电压">
-			if(IsMatch(1200, 1299, nbt['mID'])){return GREEN+"32"+GRAY+" EU/t"}
-			if(IsMatch(1300, 1399, nbt['mID'])||IsMatch(2200, 2219, nbt['mID'])||IsMatch(2320, 2329, nbt['mID'])){return GREEN+"128"+GRAY+" EU/t"}
-			if(IsMatch(1400, 1499, nbt['mID'])||IsMatch(2220, 2239, nbt['mID'])||IsMatch(2340, 2349, nbt['mID'])){return GREEN+"512"+GRAY+" EU/t"}
-			if(IsMatch(1500, 1599, nbt['mID'])||IsMatch(2240, 2259, nbt['mID'])||IsMatch(2360, 2369, nbt['mID'])){return GREEN+"2048"+GRAY+" EU/t"}
-			if(IsMatch(1600, 1699, nbt['mID'])||IsMatch(2260, 2279, nbt['mID'])||IsMatch(2380, 2389, nbt['mID'])){return GREEN+"8192"+GRAY+" EU/t"}
-			if(IsMatch(1700, 1779, nbt['mID'])||IsMatch(2280, 2299, nbt['mID'])||IsMatch(2400, 2409, nbt['mID'])){return GREEN+"32768"+GRAY+" EU/t"}
-			if(IsMatch(1780, 1799, nbt['mID'])||IsMatch(2300, 2319, nbt['mID'])||IsMatch(2420, 2429, nbt['mID'])){return GREEN+"131072"+GRAY+" EU/t"}
-			if(IsMatch(1800, 1920, nbt['mID'])||IsMatch(2440, 2519, nbt['mID'])){return GREEN+"524288"+GRAY+" EU/t"}
-			if(IsMatch(2000, 2019, nbt['mID'])){return GREEN+"8"+GRAY+" EU/t"}
-			if(IsMatch(2200, 2029, nbt['mID'])||IsMatch(2520, 2609, nbt['mID'])||IsMatch(11310, 11329, nbt['mID'])){return GREEN+"2097152"+GRAY+" EU/t"}
-			if(IsMatch(11330, 11349, nbt['mID'])){return GREEN+"8388608"+GRAY+" EU/t"}
-			if(IsMatch(11350, 11369, nbt['mID'])){return GREEN+"33554432"+GRAY+" EU/t"}
-			if(IsMatch(11370, 11379, nbt['mID'])){return GREEN+"134217728"+GRAY+" EU/t"}
-			if(IsMatch(11390, 11399, nbt['mID'])){return GREEN+"536870912"+GRAY+" EU/t"}
-			if(IsMatch(11410, 11419, nbt['mID'])){return GREEN+"1073741824"+GRAY+" EU/t"}
-			if(IsMatch(11430, 11439, nbt['mID'])){return GREEN+"2147483640"+GRAY+" EU/t"}
+			if(isBetween(1200, 1299, nbt['mID'])){return GREEN+"32"+GRAY+" EU/t"}
+			if(isBetween(1300, 1399, nbt['mID'])||isBetween(2200, 2219, nbt['mID'])||isBetween(2320, 2329, nbt['mID'])){return GREEN+"128"+GRAY+" EU/t"}
+			if(isBetween(1400, 1499, nbt['mID'])||isBetween(2220, 2239, nbt['mID'])||isBetween(2340, 2349, nbt['mID'])){return GREEN+"512"+GRAY+" EU/t"}
+			if(isBetween(1500, 1599, nbt['mID'])||isBetween(2240, 2259, nbt['mID'])||isBetween(2360, 2369, nbt['mID'])){return GREEN+"2048"+GRAY+" EU/t"}
+			if(isBetween(1600, 1699, nbt['mID'])||isBetween(2260, 2279, nbt['mID'])||isBetween(2380, 2389, nbt['mID'])){return GREEN+"8192"+GRAY+" EU/t"}
+			if(isBetween(1700, 1779, nbt['mID'])||isBetween(2280, 2299, nbt['mID'])||isBetween(2400, 2409, nbt['mID'])){return GREEN+"32768"+GRAY+" EU/t"}
+			if(isBetween(1780, 1799, nbt['mID'])||isBetween(2300, 2319, nbt['mID'])||isBetween(2420, 2429, nbt['mID'])){return GREEN+"131072"+GRAY+" EU/t"}
+			if(isBetween(1800, 1920, nbt['mID'])||isBetween(2440, 2519, nbt['mID'])){return GREEN+"524288"+GRAY+" EU/t"}
+			if(isBetween(2000, 2019, nbt['mID'])){return GREEN+"8"+GRAY+" EU/t"}
+			if(isBetween(2200, 2029, nbt['mID'])||isBetween(2520, 2609, nbt['mID'])||isBetween(11310, 11329, nbt['mID'])){return GREEN+"2097152"+GRAY+" EU/t"}
+			if(isBetween(11330, 11349, nbt['mID'])){return GREEN+"8388608"+GRAY+" EU/t"}
+			if(isBetween(11350, 11369, nbt['mID'])){return GREEN+"33554432"+GRAY+" EU/t"}
+			if(isBetween(11370, 11379, nbt['mID'])){return GREEN+"134217728"+GRAY+" EU/t"}
+			if(isBetween(11390, 11399, nbt['mID'])){return GREEN+"536870912"+GRAY+" EU/t"}
+			if(isBetween(11410, 11419, nbt['mID'])){return GREEN+"1073741824"+GRAY+" EU/t"}
+			if(isBetween(11430, 11439, nbt['mID'])){return GREEN+"2147483640"+GRAY+" EU/t"}
 		</line>			
 	</tileentity>
 	<!-- 
