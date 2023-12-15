@@ -9,6 +9,7 @@
 
     <init>
         importPackage(Packages.gregtech.api);
+        importPackage(Packages.gregtech.common.tileentities.machines.basic);
 
         function getFormatNumber(mNumber){
             return Packages.gregtech.api.util.GT_Utility.formatNumbers(mNumber)
@@ -57,18 +58,15 @@
         }
 
         function isBetteryBuffer(mID){
-            return
-            Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID].getClass().equals(Packages.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicBatteryBuffer.class)
+            return Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID] instanceof Packages.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicBatteryBuffer
         }
 
         function isCharger(mID){
-            return
-            Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID].getClass().equals(Packages.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Charger.class)
+            return Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID] instanceof Packages.gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Charger
         }
 
         function isTransformer(mID){
-            return
-            Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID].getClass().equals(Packages.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Transformer.class)
+            return Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID] instanceof Packages.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Transformer
         }
 
         function formatBytes(bytes) {
@@ -177,13 +175,14 @@
 
         <!--能源仓/普通机器-->
         <line displayname="输入电流">
+            if (isCharger(nbt['mID'])) return;
             var ampere;
-            if (isBetteryBuffer(nbt['mID']) && !isCharger(nbt['mID'])) {
+            if (isBetteryBuffer(nbt['mID'])) {
                 ampere = nbt['Inventory'].length;
                 return YELLOW + ampere * 2 + WHITE + ' 安';
             } else if (isTransformer(nbt['mID']) && nbt['mWorks'] == 1) {
                 ampere = getAmpereOut(nbt['mID']);
-            } else if (!isCharger(nbt['mID'])) {
+            } else {
                 ampere = getAmpereIn(nbt['mID']);
             }
             if (ampere != undefined) {
@@ -193,12 +192,13 @@
 
         <!--发电机/动力仓  -->
         <line displayname="输出电流">
+            if (isCharger(nbt['mID'])) return;
             var ampere;
-            if (isBetteryBuffer(nbt['mID']) && !isCharger(nbt['mID'])) {
+            if (isBetteryBuffer(nbt['mID'])) {
                 ampere = nbt['Inventory'].length;
             } else if (isTransformer(nbt['mID']) && nbt['mWorks'] == 1) {
                 ampere = getAmpereIn(nbt['mID']);
-            } else if (!isCharger(nbt['mID'])) {
+            } else {
                 ampere = getAmpereOut(nbt['mID']);
             }
             if (ampere != undefined) {
