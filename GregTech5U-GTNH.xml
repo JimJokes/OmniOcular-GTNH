@@ -6,67 +6,69 @@
 <!--Version: 5.09.34.16-GTNH -->
 <!--Date: 2022/08/8 -->
 <oo>
-
     <init>
-        importPackage(Packages.gregtech.api);
-        importPackage(Packages.gregtech.common.tileentities.machines.basic);
+        var GregTech_API = Java.type('gregtech.api.GregTech_API');
+        var GT_Utility = Java.type('gregtech.api.util.GT_Utility');
+        var GT_MetaTileEntity_BasicBatteryBuffer = Java.type('gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicBatteryBuffer');
+        var GT_MetaTileEntity_Charger = Java.type('gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Charger');
+        var GT_MetaTileEntity_Transformer = Java.type('gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Transformer');
 
         function getFormatNumber(mNumber){
-            return Packages.gregtech.api.util.GT_Utility.formatNumbers(mNumber)
+            return GT_Utility.formatNumbers(mNumber)
         }
 
         function getColoredTier(vol){
-            return Packages.gregtech.api.util.GT_Utility.getColoredTierNameFromVoltage(vol)
+            return GT_Utility.getColoredTierNameFromVoltage(vol)
         }
 
         function getCableVoltage(mID){
-            var tileEntity = Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID];
+            var tileEntity = GregTech_API.METATILEENTITIES[mID];
             if (tileEntity.isSimpleMachine()){return tileEntity.mVoltage}
         }
 
         function getCableLoss(mID){
-            var tileEntity = Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID];
+            var tileEntity = GregTech_API.METATILEENTITIES[mID];
             if (tileEntity.isSimpleMachine()){return tileEntity.mCableLossPerMeter}
         }
 
         function getAmperage(mID){
-            var tileEntity = Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID];
+            var tileEntity = GregTech_API.METATILEENTITIES[mID];
             if (tileEntity.isSimpleMachine()){return tileEntity.mAmperage}
         }
 
         function getMachineVoltage(mID){
-            var tileEntity = Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID];
+            var tileEntity = GregTech_API.METATILEENTITIES[mID];
             if (tileEntity.isElectric()){return tileEntity.maxEUInput()?tileEntity.maxEUInput():tileEntity.maxEUOutput()}
         }
 
         function getVoltageIn(mID){
-            return Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID].maxEUInput();
+            return GregTech_API.METATILEENTITIES[mID].maxEUInput();
         }
 
         function getVoltageOut(mID){
-            return Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID].maxEUOutput();
+            return GregTech_API.METATILEENTITIES[mID].maxEUOutput();
         }
 
         function getAmpereOut(mID){
-            var tileEntity = Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID];
+            var tileEntity = GregTech_API.METATILEENTITIES[mID];
             if (tileEntity.isEnetOutput()) {return tileEntity.maxAmperesOut()}
         }
 
         function getAmpereIn(mID){
-            var tileEntity = Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID];
+            var tileEntity = GregTech_API.METATILEENTITIES[mID];
             if (tileEntity.isEnetInput()) {return tileEntity.maxAmperesIn()}
         }
 
         function isBetteryBuffer(mID){
-            return Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID] instanceof Packages.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicBatteryBuffer
+            return GregTech_API.METATILEENTITIES[mID] instanceof GT_MetaTileEntity_BasicBatteryBuffer
         }
 
         function isCharger(mID){
-            return Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID] instanceof Packages.gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Charger
+            return GregTech_API.METATILEENTITIES[mID] instanceof GT_MetaTileEntity_Charger
         }
 
         function isTransformer(mID){
-            return Packages.gregtech.api.GregTech_API.METATILEENTITIES[mID] instanceof Packages.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Transformer
+            return GregTech_API.METATILEENTITIES[mID] instanceof GT_MetaTileEntity_Transformer
         }
 
         function formatBytes(bytes) {
