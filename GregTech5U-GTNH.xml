@@ -268,106 +268,81 @@
                 switch (nbt['ssMode']) {
                     case 0:
                         return YELLOW + "粉碎-洗矿-热离-粉碎";
-                        break;
                     case 1:
                         return YELLOW + "粉碎-洗矿-粉碎-离心";
-                        break;
                     case 2:
                         return YELLOW + "粉碎-粉碎-离心";
-                        break;
                     case 3:
                         return YELLOW + "粉碎-洗矿-筛选";
-                        break;
                     case 4:
                         return YELLOW + "粉碎-浸洗-粉碎-离心";
-                        break;
                 }
             if (nbt['mID'] == 860)
                 switch (nbt['mInternalMode']) {
                     case 0:
                         return "\\n" + YELLOW + "压缩机-电路20" + "\\n" + YELLOW + "车床-电路21" + "\\n" + YELLOW + "磁化机-电路22";
-                        break;
                     case 1:
                         return "\\n" + YELLOW + "发酵槽-电路20" + "\\n" + YELLOW + "流体提取机-电路21" + "\\n" + YELLOW + "物品提取机-电路22";
-                        break;
                     case 2:
                         return "\\n" + YELLOW + "光刻机-电路20" + "\\n" + YELLOW + "高压釜-电路21" + "\\n" + YELLOW + "流体固化-电路22";
-                        break;
                 }
             if (nbt['mID'] == 32018)
                 switch (nbt['RunningMode']) {
                     case 0:
                         return YELLOW + "精密模式";
-                        break;
                     case 1:
                         return YELLOW + "常规模式";
-                        break;
                 }
             if (nbt['mID'] == 792)
                 switch (nbt['mFormingMode']) {
                     case 0:
                         return YELLOW + "大卷板";
-                        break;
                     case 1:
                         return YELLOW + "大冲压";
-                        break;
                 }
             if (nbt['mID'] == 850)
                 switch (nbt['mMode']) {
                     case 0:
                         return YELLOW + "洗矿厂";
-                        break;
                     case 1:
                         return YELLOW + "简易洗矿厂";
-                        break;
                     case 2:
                         return YELLOW + "化学浸洗机";
-                        break;
                 }
             if (nbt['mID'] == 799)
                 switch (nbt['mMode']) {
                     case 0:
                         return YELLOW + "质量发生器";
-                        break;
                     case 1:
                         return YELLOW + "回收机";
-                        break;
                 }
             if (nbt['mID'] == 995)
                 switch (nbt['mDehydratorMode']) {
                     case 0:
                         return YELLOW + "真空炉";
-                        break;
                     case 1:
                         return YELLOW + "脱水机";
-                        break;
                 }
             if (nbt['mID'] == 31021)
                 switch (nbt['mMode']) {
                     case 0:
                         return YELLOW + "蒸馏塔";
-                        break;
                     case 1:
                         return YELLOW + "蒸馏室";
-                        break;
                 }
             if (nbt['mID'] == 862)
                 switch (nbt['mPlasmaMode']) {
                     case 0:
                         return YELLOW + "普通电弧炉";
-                        break;
                     case 1:
                         return YELLOW + "等离子电弧炉";
-                        break;
                 }
             if (nbt['mID'] == 992)
                 switch (nbt['mCuttingMode']) {
                     case 0:
                         return YELLOW + "切片机";
-                        break;
                     case 1:
                         return YELLOW + "切割机";
-                        break;
                 }
         </line>
 
