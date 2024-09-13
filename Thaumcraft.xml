@@ -87,7 +87,7 @@
 				return GREEN+"Activated"
         </line>
     </tileentity>
-	<tileentity id="TileNode">
+	<tileentity id="TileExtendedNode">
 		<line displayname="hud.msg.Thaumcraft.NodeType">
 			var result="";
 			switch(nbt['type']){
