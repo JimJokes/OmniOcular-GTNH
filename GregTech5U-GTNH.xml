@@ -7,11 +7,11 @@
 <!--Date: 2022/08/8 -->
 <oo>
     <init>
-        var GregTech_API = Java.type('gregtech.api.GregTech_API');
-        var GT_Utility = Java.type('gregtech.api.util.GT_Utility');
-        var GT_MetaTileEntity_BasicBatteryBuffer = Java.type('gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicBatteryBuffer');
-        var GT_MetaTileEntity_Charger = Java.type('gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Charger');
-        var GT_MetaTileEntity_Transformer = Java.type('gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Transformer');
+        var GregTech_API = Java.type('gregtech.api.GregTechAPI');
+        var GT_Utility = Java.type('gregtech.api.util.GTUtility');
+        var GT_MetaTileEntity_BasicBatteryBuffer = Java.type('gregtech.api.metatileentity.implementations.MTEBasicBatteryBuffer');
+        var GT_MetaTileEntity_Charger = Java.type('gregtech.common.tileentities.machines.basic.MTECharger');
+        var GT_MetaTileEntity_Transformer = Java.type('gregtech.api.metatileentity.implementations.MTETransformer');
 
         function getFormatNumber(mNumber){
             return GT_Utility.formatNumbers(mNumber)
